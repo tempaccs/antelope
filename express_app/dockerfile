@@ -1,0 +1,19 @@
+FROM node:12.16.1
+
+ENV PORT=3000
+
+WORKDIR /app
+
+COPY package.json ./package.json
+COPY package-lock.json ./package-lock.json
+
+RUN npm ci
+
+COPY . /app
+
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.2/wait /wait
+RUN chmod +x /wait
+
+CMD sh -c "/wait &&  npm run dev"
+
+EXPOSE $PORT

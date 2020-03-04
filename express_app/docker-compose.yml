@@ -1,0 +1,22 @@
+version: '3'
+services:
+  server:
+    build: .
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    environment:
+      MONGO_DB_URL: mongo
+      MONGO_USER: root
+      MONGO_PW: example
+      WAIT_HOSTS: mongo:27017
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
