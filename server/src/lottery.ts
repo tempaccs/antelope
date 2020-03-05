@@ -12,15 +12,15 @@ type Entry = {
   numbers: Array<number>;
 };
 
-const readCSV = (pathToFile: string): Promise<Array<{}>> => new Promise((resolve, reject) => {
-  const dataList: Array<{}> = []
-  fs.createReadStream(pathToFile)
-    .pipe(csv())
-    .on("data", data => dataList.push(data))
-    .on("error", error => reject(error))
-    .on("end", () => resolve(dataList));
-    
-})
+const readCSV = (pathToFile: string): Promise<Array<{}>> =>
+  new Promise((resolve, reject) => {
+    const dataList: Array<{}> = [];
+    fs.createReadStream(pathToFile)
+      .pipe(csv())
+      .on("data", data => dataList.push(data))
+      .on("error", error => reject(error))
+      .on("end", () => resolve(dataList));
+  });
 
 export const generateRandomLotteryNumbers = (): Array<number> => {
   const winningNumbers = [];
@@ -30,29 +30,32 @@ export const generateRandomLotteryNumbers = (): Array<number> => {
   return winningNumbers;
 };
 
-const getAmountMatches = (winningNumbers: Array<number>, selectedNumbers: Array<number>): number => selectedNumbers.reduce(
-  (amountMatches, curNumber, idx) => {
-    const isMatch = curNumber === winningNumbers[idx];  
+const getAmountMatches = (
+  winningNumbers: Array<number>,
+  selectedNumbers: Array<number>
+): number =>
+  selectedNumbers.reduce((amountMatches, curNumber, idx) => {
+    const isMatch = curNumber === winningNumbers[idx];
     return isMatch ? amountMatches + 1 : amountMatches;
-  },
-  0
-)
+  }, 0);
 
 const turnRawEntryToEntry = (entry: RawEntry): Entry => ({
   ...entry,
   numbers: JSON.parse(entry.numbers)
-})
+});
 
 export const getWinners = async (
   pathToEntries: string,
-  winningsNumbers: Array<number>,
+  winningsNumbers: Array<number>
 ) => {
-  console.log(pathToEntries)
-  const rawEntries = await readCSV(pathToEntries) as Array<RawEntry>
-  const entries = rawEntries.map(entry => turnRawEntryToEntry(entry))
-  
-  const winningEntries = entries.filter((entry: Entry) => getAmountMatches(winningsNumbers, entry.numbers) >= 3);
-  return winningEntries
+  console.log(pathToEntries);
+  const rawEntries = (await readCSV(pathToEntries)) as Array<RawEntry>;
+  const entries = rawEntries.map(entry => turnRawEntryToEntry(entry));
+
+  const winningEntries = entries.filter(
+    (entry: Entry) => getAmountMatches(winningsNumbers, entry.numbers) >= 3
+  );
+  return winningEntries;
 };
 
-export default getWinners
+export default getWinners;
