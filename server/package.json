@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "start": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/tempaccs/antelope#readme",
   "dependencies": {
+    "csv-parser": "^2.3.2",
+    "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
